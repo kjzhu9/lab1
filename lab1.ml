@@ -191,9 +191,12 @@ can raise an appropriate exception -- a Match_failure or
 Invalid_argument exception for instance.
 ......................................................................*)
 
-let max_list (lst : int list) : int =
-(* let max_list : (lst : int list) -> int =
- *)  failwith "max_list not implemented" ;;
+let rec max_list (lst : int list) : int =
+  match lst with
+  | [] -> raise (Invalid_argument "empty list")
+  | [l] -> l
+  | head :: tail -> max head (max_list tail)
+;;
 
 (*......................................................................
 Exercise 9: Define a function zip, that takes two int lists and
@@ -208,7 +211,11 @@ that, zip [1] [2; 3; 4] = [(1, 2); (false, 3); (false, 4)]?
 ......................................................................*)
 
 let zip (x : int list) (y : int list) : (int * int) list =
-  failwith "zip not implemented" ;;
+  match x, y with
+  | [], [] -> []
+  | (xh :: xt), (yh :: yt) -> (xh, yh) :: zip xt yt
+  | _ -> raise (Invalid_argument "Arrays must be the same size")
+   ;;
 
 (*.....................................................................
 Exercise 10: Recall the definition of the function prods from lecture
